@@ -6,6 +6,10 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public interface AdsService {
     // Получение всех объявлений
     Ads getAllAds();
@@ -26,5 +30,5 @@ public interface AdsService {
     Ads getAdsMe();
 
     // Обновление картинки объявления
-    byte[] updateImage(int id, MultipartFile image);
+    byte[] updateImage(int id, MultipartFile image) throws IOException;
 }
