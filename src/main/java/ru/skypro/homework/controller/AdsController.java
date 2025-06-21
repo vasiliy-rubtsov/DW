@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
@@ -8,6 +9,10 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -58,7 +63,8 @@ public class AdsController {
 
     // Обновление картинки объявления
     @PatchMapping(path = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public byte[] updateImage(@PathVariable int id, @RequestPart MultipartFile image) {
-        return adsService.updateImage(id, image);
+    public byte[] updateImage(@PathVariable int id, @RequestPart MultipartFile image) throws IOException {
+        byte[] result = adsService.updateImage(id, image);
+        return result;
     }
 }

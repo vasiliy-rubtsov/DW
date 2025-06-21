@@ -2,6 +2,7 @@ package ru.skypro.homework.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
@@ -11,4 +12,9 @@ public class Comments {
     private int count;	// общее количество комментариев
     @JsonProperty("results")
     private List<Comment> results;	// список комментариев
+
+    public Comments() {
+        this.count = 0;
+        this.results = new ArrayList<>();
+    }
 }

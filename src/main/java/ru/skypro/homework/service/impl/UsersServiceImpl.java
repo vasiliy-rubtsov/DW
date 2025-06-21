@@ -19,15 +19,7 @@ public class UsersServiceImpl implements UsersService {
     // Получение информации об авторизованном пользователе
     @Override
     public User getUser() {
-        User authUser =  new User();
-        authUser.setId(123);
-        authUser.setFirstName("John");
-        authUser.setLastName("Doe");
-        authUser.setEmail("john@doe.com");
-        authUser.setPhone("123456789");
-        authUser.setRole("USER");
-        authUser.setImage("image.jpg");
-        return authUser;
+        return new User();
     }
 
     // Обновление информации об авторизованном пользователе

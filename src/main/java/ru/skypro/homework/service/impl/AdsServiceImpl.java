@@ -8,28 +8,30 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdsService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AdsServiceImpl implements AdsService {
     // Получение всех объявлений
     @Override
     public Ads getAllAds() {
-        Ads ads = new Ads();
-        return ads;
+        return new Ads();
     }
 
     // Добавление объявления
     @Override
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
-        Ad ad = new Ad();
-
-        return ad;
+        return new Ad();
     }
 
     // Получение информации об объявлении
     @Override
     public ExtendedAd getExtendedAdById(int id) {
-        ExtendedAd extendedAd = new ExtendedAd();
-        return extendedAd;
+        return new ExtendedAd();
     }
 
     // Удаление объявления
@@ -41,21 +43,58 @@ public class AdsServiceImpl implements AdsService {
     // Обновление информации об объявлении
     @Override
     public Ad updateAds(int id, CreateOrUpdateAd createOrUpdateAd) {
-        Ad ad = new Ad();
-        return ad;
+        return new Ad();
     }
 
     // Получение объявлений авторизованного пользователя
     @Override
     public Ads getAdsMe() {
-        Ads ads = new Ads();
-        return ads;
+        return new Ads();
     }
 
     // Обновление картинки объявления
     @Override
-    public byte[] updateImage(int id, MultipartFile image) {
-        byte[] imageBytes = new byte[0];
-        return imageBytes;
+    public byte[] updateImage(int id, MultipartFile image) throws IOException {
+        List<String> result = new ArrayList<>();
+        result.add("Строка 1");
+        result.add("Строка 2");
+        result.add("Строка 3");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+
+        for (String line : result) {
+            dos.writeUTF(line);
+        }
+
+        return baos.toByteArray();
+    }
+
+    private Ads makeAds() {
+        Ads ads = new Ads();
+
+        Ad ad = new Ad();
+        ad.setPk(1);
+        ad.setAuthor(1);
+        ad.setPrice(2500);
+        ad.setTitle("Суперприбор");
+        ads.getResults().add(ad);
+
+        ad = new Ad();
+        ad.setPk(2);
+        ad.setAuthor(1);
+        ad.setPrice(3200);
+        ad.setTitle("Мегаприбор");
+        ads.getResults().add(ad);
+
+        ad = new Ad();
+        ad.setPk(3);
+        ad.setAuthor(1);
+        ad.setPrice(1000);
+        ad.setTitle("Простой прибор");
+        ads.getResults().add(ad);
+
+        ads.setCount(3);
+        return ads;
     }
 }
