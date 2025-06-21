@@ -1,0 +1,20 @@
+package ru.skypro.homework.service;
+
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
+
+public interface UsersService {
+    // Обновление пароля
+    void setPassword(NewPassword newPassword);
+
+    // Получение информации об авторизованном пользователе
+    User getUser();
+
+    // Обновление информации об авторизованном пользователе
+    UpdateUser updateUser(UpdateUser user);
+
+    // Обновление аватара авторизованного пользователя
+    void updateUserImage(MultipartFile image);
+}
