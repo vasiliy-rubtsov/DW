@@ -5,6 +5,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
+import java.io.IOException;
+
 public interface UsersService {
     // Обновление пароля
     void setPassword(NewPassword newPassword);
@@ -16,5 +18,5 @@ public interface UsersService {
     UpdateUser updateUser(UpdateUser user);
 
     // Обновление аватара авторизованного пользователя
-    void updateUserImage(MultipartFile image);
+    void updateUserImage(MultipartFile image) throws IOException;
 }

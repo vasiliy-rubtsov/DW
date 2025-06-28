@@ -8,6 +8,8 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UsersService;
 
+import java.io.IOException;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
@@ -39,7 +41,7 @@ public class UsersController {
 
     // Обновление аватара авторизованного пользователя
     @PatchMapping(path = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void updateUserImage(@RequestPart MultipartFile image) {
+    public void updateUserImage(@RequestPart MultipartFile image) throws IOException {
         usersService.updateUserImage(image);
     }
 }

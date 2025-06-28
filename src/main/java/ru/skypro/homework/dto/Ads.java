@@ -17,5 +17,10 @@ public class Ads {
         this.count = 0;
         this.results = new ArrayList<>();
     }
+
+    public void addAd(Ad ad) {
+        results.add(ad);
+        count = results.size();
+    }
 }
 
