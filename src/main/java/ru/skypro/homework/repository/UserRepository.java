@@ -6,4 +6,5 @@ import ru.skypro.homework.model.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepositoryImplementation<UserModel, Long> {
+    UserModel findByEmail(String email);
 }

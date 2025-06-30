@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -52,10 +53,7 @@ public class CommentsServiceImpl implements CommentsService {
     // Добавление комментария к объявлению
     @Override
     public Comment addComment(long id, CreateOrUpdateComment createdComment) throws ObjectNotFoundException {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Ищем объявление, к которому надо добавить коммент
         AdModel adModel = adsRepository.findById(id).orElse(null);
@@ -84,10 +82,7 @@ public class CommentsServiceImpl implements CommentsService {
     // Обновление комментария
     @Override
     public Comment updateComment(long adId, long commentId, CreateOrUpdateComment updatedComment) throws ObjectNotFoundException, ForbiddenException {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Ищем объявление
         AdModel adModel = adsRepository.findById(adId).orElse(null);

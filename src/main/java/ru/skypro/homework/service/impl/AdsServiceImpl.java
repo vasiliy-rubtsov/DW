@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,10 +52,7 @@ public class AdsServiceImpl implements AdsService {
     // Добавление объявления
     @Override
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         AdModel adModel = new AdModel();
         adModel.setTitle(properties.getTitle());
@@ -102,7 +100,7 @@ public class AdsServiceImpl implements AdsService {
     // Удаление объявления
     @Override
     public void removeAd(long id) throws ForbiddenException, ObjectNotFoundException {
-        long userId = 1L;
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Находим удаляемое объявление в БД по его ID
         AdModel adModel = adsRepository.findById(id).orElse(null);
@@ -114,7 +112,7 @@ public class AdsServiceImpl implements AdsService {
 
         // Проверяем, принадлежит ли удаляемое объявление текущему пользователю
         long adUserId = adModel.getAuthor().getId();
-        if (adUserId != userId) {
+        if (adUserId != userModel.getId() && !userModel.getRole().equals(Role.ADMIN.toString())) {
             // не принадлежит - ошибка 403
             throw new ForbiddenException();
         }
@@ -125,10 +123,7 @@ public class AdsServiceImpl implements AdsService {
     // Обновление информации об объявлении
     @Override
     public Ad updateAds(long id, CreateOrUpdateAd createOrUpdateAd) throws ForbiddenException, ObjectNotFoundException {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Ищем объявление
         AdModel adModel = adsRepository.findById(id).orElse(null);
@@ -153,22 +148,16 @@ public class AdsServiceImpl implements AdsService {
     // Получение объявлений авторизованного пользователя
     @Override
     public Ads getAdsMe() {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        List<AdModel> ads = adsRepository.findByAuthorId(userId);
+        List<AdModel> ads = adsRepository.findByAuthorId(userModel.getId());
         return makeAdsResult(ads);
     }
 
     // Обновление картинки объявления
     @Override
     public byte[] updateImage(long id, MultipartFile image) throws IOException, ObjectNotFoundException, ForbiddenException {
-        // Потом сделать через авторизацию
-        long userId = 1L;
-        UserModel userModel = userRepository.findById(userId).orElse(null);
-        //
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Ищем объявление
         AdModel adModel = adsRepository.findById(id).orElse(null);

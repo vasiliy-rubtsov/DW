@@ -3,9 +3,11 @@
 CREATE TABLE users (
     id SERIAL NOT NULL PRIMARY KEY,	-- id пользователя
     email VARCHAR(255) NOT NULL,	-- логин пользователя
-    first_name VARCHAR(255) NOT NULL,-- имя пользователя
-    last_name VARCHAR(255) NOT NULL,	-- фамилия пользователя
-    phone VARCHAR(255) NOT NULL,	-- телефон пользователя
+    password VARCHAR(255) NOT NULL, -- пароль пользователя
+    enabled BOOLEAN NOT NULL DEFAULT TRUE, -- включен
+    first_name VARCHAR(255),        -- имя пользователя
+    last_name VARCHAR(255),	        -- фамилия пользователя
+    phone VARCHAR(255),	            -- телефон пользователя
     role VARCHAR(255) NOT NULL,	    -- роль пользователя
     image VARCHAR(255)	            -- ссылка на аватар пользователя
 );
@@ -34,3 +36,4 @@ ALTER TABLE comments ADD FOREIGN KEY (ad_id) REFERENCES ads(id);
 CREATE INDEX ix__comments__author_id ON comments(author_id);
 CREATE INDEX ix__comments__ad_id ON comments(ad_id);
 CREATE INDEX ix__ads__author_id ON ads(author_id);
+CREATE INDEX ix__users__email ON users(email);

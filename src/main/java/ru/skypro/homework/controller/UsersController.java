@@ -1,11 +1,14 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.service.UsersService;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ public class UsersController {
 
     // Обновление пароля
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody NewPassword newPassword) {
+    public void setPassword(@RequestBody NewPassword newPassword) throws ForbiddenException {
         usersService.setPassword(newPassword);
     }
 
