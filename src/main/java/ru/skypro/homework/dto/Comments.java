@@ -17,4 +17,9 @@ public class Comments {
         this.count = 0;
         this.results = new ArrayList<>();
     }
+
+    public void addComment(Comment comment) {
+        results.add(comment);
+        count = results.size();
+    }
 }

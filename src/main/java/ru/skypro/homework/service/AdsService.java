@@ -1,10 +1,9 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.ForbiddenException;
+import ru.skypro.homework.exception.ObjectNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,20 +14,20 @@ public interface AdsService {
     Ads getAllAds();
 
     // Добавление объявления
-    Ad addAd(CreateOrUpdateAd properties, MultipartFile image);
+    Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException;
 
     // Получение информации об объявлении
-    ExtendedAd getExtendedAdById(int id);
+    ExtendedAd getExtendedAdById(long id) throws ObjectNotFoundException;
 
     // Удаление объявления
-    void removeAd(int id);
+    void removeAd(long id) throws ForbiddenException, ObjectNotFoundException;
 
     // Обновление информации об объявлении
-    Ad updateAds(int id, CreateOrUpdateAd createOrUpdateAd);
+    Ad updateAds(long id, CreateOrUpdateAd createOrUpdateAd) throws ForbiddenException, ObjectNotFoundException;
 
     // Получение объявлений авторизованного пользователя
     Ads getAdsMe();
 
     // Обновление картинки объявления
-    byte[] updateImage(int id, MultipartFile image) throws IOException;
+    byte[] updateImage(long id, MultipartFile image) throws IOException, ObjectNotFoundException, ForbiddenException;
 }
