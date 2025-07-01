@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.component.OutDtoMaker;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.ObjectNotFoundException;
 import ru.skypro.homework.model.AdModel;
@@ -16,20 +17,18 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
-    private final UserRepository userRepository;
+    private final OutDtoMaker outDtoMaker;
 
-    public CommentsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository,  UserRepository userRepository) {
+    public CommentsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository,  OutDtoMaker outDtoMaker) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
-        this.userRepository = userRepository;
+        this.outDtoMaker = outDtoMaker;
     }
 
     // Получение комментариев объявления
@@ -40,14 +39,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new ObjectNotFoundException();
         }
 
-        Comments comments = new Comments();
-
-        for (CommentModel commentModel : adModel.getCommentModels()) {
-            Comment comment = makeComment(commentModel);
-            comments.addComment(comment);
-        }
-
-        return comments;
+        return outDtoMaker.makeComments(adModel.getCommentModels());
     }
 
     // Добавление комментария к объявлению
@@ -70,13 +62,24 @@ public class CommentsServiceImpl implements CommentsService {
 
         commentRepository.save(commentModel);
 
-        return makeComment(commentModel);
+        return outDtoMaker.makeComment(commentModel);
     }
 
     // Удаление комментария
     @Override
-    public void deleteComment(long adId, long commentId) {
+    public void deleteComment(long adId, long commentId) throws ObjectNotFoundException, ForbiddenException {
+        UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        CommentModel commentModel = commentRepository.findById(commentId).orElse(null);
+        if (commentModel == null) {
+            throw new ObjectNotFoundException();
+        }
+
+        if (!(userModel.getRole().equals("ADMIN")  || userModel.getId() == commentModel.getAuthor().getId())) {
+            throw new ForbiddenException();
+        }
+
+        commentRepository.delete(commentModel);
     }
 
     // Обновление комментария
@@ -108,18 +111,6 @@ public class CommentsServiceImpl implements CommentsService {
 
         commentRepository.save(commentModel);
 
-        return makeComment(commentModel);
-    }
-
-    private Comment makeComment(CommentModel commentModel) {
-        Comment result = new Comment();
-        result.setPk(commentModel.getId());
-        result.setAuthor(commentModel.getAuthor().getId());
-        result.setText(commentModel.getText());
-        result.setAuthorFirstName(commentModel.getAuthor().getFirstName());
-        result.setAuthorImage("/images/" + commentModel.getAuthor().getImage());
-        result.setCreatedAt(commentModel.getCreatedAt().getTime());
-
-        return result;
+        return outDtoMaker.makeComment(commentModel);
     }
 }

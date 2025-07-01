@@ -1,17 +1,13 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.FileTypeEnum;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.component.OutDtoMaker;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.UserRepository;
@@ -27,14 +23,14 @@ public class UsersServiceImpl implements UsersService {
     private String imageFileDir;
     private final ImagesService imagesService;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final UserDetailsManager  userDetailsManager;
+    private  final OutDtoMaker outDtoMaker;
 
-    public UsersServiceImpl(ImagesService imagesService, UserRepository userRepository, PasswordEncoder passwordEncoder,  UserDetailsManager userDetailsManager) {
+    public UsersServiceImpl(ImagesService imagesService, UserRepository userRepository, UserDetailsManager userDetailsManager, OutDtoMaker outDtoMaker) {
         this.imagesService = imagesService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.userDetailsManager = userDetailsManager;
+        this.outDtoMaker = outDtoMaker;
     }
 
     // Обновление пароля
@@ -47,17 +43,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public User getUser() {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        User user = new User();
-        user.setImage("/images/" + userModel.getImage());
-        user.setFirstName(userModel.getFirstName());
-        user.setLastName(userModel.getLastName());
-        user.setEmail(userModel.getEmail());
-        user.setPhone(userModel.getPhone());
-        user.setRole(userModel.getRole());
-        user.setId(userModel.getId());
-
-        return user;
+        return outDtoMaker.makeUser(userModel);
     }
 
     // Обновление информации об авторизованном пользователе

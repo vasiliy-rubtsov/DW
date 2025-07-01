@@ -33,9 +33,9 @@ public class AdsController {
 
     // Добавление объявления
     @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Ad> addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) throws IOException {
-        Ad result = adsService.addAd(properties, image);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Ad addAd(@RequestPart("properties") CreateOrUpdateAd properties, @RequestPart("image") MultipartFile image) throws IOException {
+        return adsService.addAd(properties, image);
     }
 
     // Получение информации об объявлении
@@ -46,16 +46,15 @@ public class AdsController {
 
     // Удаление объявления
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeAd(@PathVariable int id) throws ForbiddenException, ObjectNotFoundException {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAd(@PathVariable int id) throws ForbiddenException, ObjectNotFoundException {
         adsService.removeAd(id);
-        return ResponseEntity.noContent().build();
     }
 
     // Обновление информации об объявлении
     @PatchMapping("/{id}")
-    public ResponseEntity<Ad> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd createOrUpdateAd) throws ForbiddenException, ObjectNotFoundException {
-        Ad result = adsService.updateAds(id, createOrUpdateAd);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public Ad updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAd createOrUpdateAd) throws ForbiddenException, ObjectNotFoundException {
+        return adsService.updateAds(id, createOrUpdateAd);
     }
 
     // Получение объявлений авторизованного пользователя
@@ -66,7 +65,7 @@ public class AdsController {
 
     // Обновление картинки объявления
     @PatchMapping(path = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<byte[]> updateImage(@PathVariable int id, @RequestPart MultipartFile image) throws IOException, ForbiddenException, ObjectNotFoundException {
-        return new ResponseEntity<>(adsService.updateImage(id, image), HttpStatus.OK);
+    public byte[] updateImage(@PathVariable int id, @RequestPart MultipartFile image) throws IOException, ForbiddenException, ObjectNotFoundException {
+        return adsService.updateImage(id, image);
     }
 }

@@ -4,23 +4,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.ObjectNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<String> ForbiddenExceptionHandler(ForbiddenException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String ForbiddenExceptionHandler(ForbiddenException e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<String> ObjectNotFoundExceptionHandler(ObjectNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String ObjectNotFoundExceptionHandler(ObjectNotFoundException e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericException(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleGenericException(Exception e) {
+        return e.getMessage();
     }
 }

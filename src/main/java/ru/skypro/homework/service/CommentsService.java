@@ -16,7 +16,7 @@ public interface CommentsService {
     Comment addComment(long id, CreateOrUpdateComment createdComment) throws ObjectNotFoundException;
 
     // Удаление комментария
-    void deleteComment(long adId, long commentId);
+    void deleteComment(long adId, long commentId) throws ObjectNotFoundException, ForbiddenException;
 
     // Обновление комментария
     Comment updateComment(long adId, long commentId, CreateOrUpdateComment updatedComment) throws ObjectNotFoundException, ForbiddenException;

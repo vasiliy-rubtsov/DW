@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.component.OutDtoMaker;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.ObjectNotFoundException;
@@ -31,22 +32,24 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
     private final UserDetailsManager userDetailsManager;
     private final ImagesService imagesService;
+    private final OutDtoMaker outDtoMaker;
 
     @Value("${ads.image-file-dir}")
     private String imageFileDir;
 
-    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, UserDetailsManager userDetailsManager,  ImagesService imagesService) {
+    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, UserDetailsManager userDetailsManager,  ImagesService imagesService,  OutDtoMaker outDtoMaker) {
         this.adsRepository = adsRepository;
         this.userRepository = userRepository;
         this.userDetailsManager = userDetailsManager;
         this.imagesService = imagesService;
+        this.outDtoMaker = outDtoMaker;
     }
 
     // Получение всех объявлений
     @Override
     public Ads getAllAds() {
         List<AdModel> ads = adsRepository.findAll();
-        return makeAdsResult(ads);
+        return outDtoMaker.makeAds(ads);
     }
 
     // Добавление объявления
@@ -68,33 +71,19 @@ public class AdsServiceImpl implements AdsService {
         adModel.setImage(targetFileName);
         adsRepository.save(adModel);
 
-        return makeAdResult(adModel);
+        return outDtoMaker.makeAd(adModel);
     }
 
     // Получение информации об объявлении
     @Override
     public ExtendedAd getExtendedAdById(long id) throws ObjectNotFoundException {
-        ExtendedAd result = new ExtendedAd();
-
         AdModel adModel = adsRepository.findById(id).orElse(null);
 
         if (adModel == null) {
             throw new ObjectNotFoundException();
         }
 
-        result.setImage("/images/" + adModel.getImage());
-        result.setTitle(adModel.getTitle());
-        result.setPrice(adModel.getPrice());
-        result.setDescription(adModel.getDescription());
-        result.setPk(adModel.getId());
-
-        UserModel author = adModel.getAuthor();
-        result.setEmail(author.getEmail());
-        result.setPhone(author.getPhone());
-        result.setAuthorFirstName(author.getFirstName());
-        result.setAuthorLastName(author.getLastName());
-
-        return result;
+        return outDtoMaker.makeExtendedAd(adModel);
     }
 
     // Удаление объявления
@@ -142,7 +131,7 @@ public class AdsServiceImpl implements AdsService {
 
         adsRepository.save(adModel);
 
-        return makeAdResult(adModel);
+        return outDtoMaker.makeAd(adModel);
     }
 
     // Получение объявлений авторизованного пользователя
@@ -151,7 +140,7 @@ public class AdsServiceImpl implements AdsService {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         List<AdModel> ads = adsRepository.findByAuthorId(userModel.getId());
-        return makeAdsResult(ads);
+        return outDtoMaker.makeAds(ads);
     }
 
     // Обновление картинки объявления
@@ -179,33 +168,4 @@ public class AdsServiceImpl implements AdsService {
         Path filePath = Path.of(imageFileDir, targetFileName);
         return Files.readAllBytes(filePath);
     }
-
-    private Ads makeAdsResult(List<AdModel> ads) {
-        Ads result = new Ads();
-        Ad ad;
-        for (AdModel adModel : ads) {
-            ad =  new Ad();
-            ad.setImage("/images/" + adModel.getImage());
-            ad.setTitle(adModel.getTitle());
-            ad.setPk(adModel.getId());
-            ad.setPrice(adModel.getPrice());
-            ad.setAuthor(adModel.getAuthor().getId());
-            result.addAd(ad);
-        }
-
-        return result;
-    }
-
-    private Ad makeAdResult(AdModel ad) {
-        Ad result = new Ad();
-
-        result.setImage("/images/" + ad.getImage());
-        result.setAuthor(ad.getAuthor().getId());
-        result.setTitle(ad.getTitle());
-        result.setPrice(ad.getPrice());
-        result.setPk(ad.getId());
-
-        return result;
-    }
-
 }

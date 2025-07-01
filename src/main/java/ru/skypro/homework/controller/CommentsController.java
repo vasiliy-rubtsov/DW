@@ -33,7 +33,7 @@ public class CommentsController {
 
     // Удаление комментария
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public void deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int commentId) {
+    public void deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int commentId) throws ForbiddenException, ObjectNotFoundException {
         commentsService.deleteComment(adId, commentId);
     }
 
