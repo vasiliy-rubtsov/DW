@@ -6,13 +6,13 @@ import lombok.Data;
 @Data
 public class Ad {
     @JsonProperty("author")
-    private int author;	// id автора объявления
+    private long author;	// id автора объявления
 
     @JsonProperty("image")
     private String image;	// ссылка на картинку объявления
 
     @JsonProperty("pk")
-    private int pk;	// id объявления
+    private long pk;	// id объявления
 
     @JsonProperty("price")
     private int price;	// цена объявления

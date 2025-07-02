@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Comment {
     @JsonProperty("author")
-    private int author;	// id автора комментария
+    private long author;	// id автора комментария
     @JsonProperty("authorImage")
     private String authorImage;	// ссылка на аватар автора комментария
     @JsonProperty("authorFirstName")
@@ -14,7 +14,7 @@ public class Comment {
     @JsonProperty("createdAt")
     private long createdAt;	// дата и время создания комментария в миллисекундах с 00:00:00 01.01.1970
     @JsonProperty("pk")
-    private int pk;	// id комментария
+    private long pk;	// id комментария
     @JsonProperty("text")
     private String text;	// текст комментария
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class User {
     @JsonProperty("id")
-    private int id;	// id пользователя
+    private long id;	// id пользователя
     @JsonProperty("email")
     private String email = "";	// логин пользователя
     @JsonProperty("firstName")

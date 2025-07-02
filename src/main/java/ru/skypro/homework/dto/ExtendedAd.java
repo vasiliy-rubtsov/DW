@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ExtendedAd {
     @JsonProperty("pk")
-    private int pk;	// id объявления
+    private long pk;	// id объявления
     @JsonProperty("authorFirstName")
     private String authorFirstName;	// имя автора объявления
     @JsonProperty("authorLastName")
