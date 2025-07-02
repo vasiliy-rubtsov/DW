@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.component.OutDtoMaker;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.ObjectNotFoundException;
+import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.CommentModel;
 import ru.skypro.homework.model.UserModel;
@@ -23,12 +23,12 @@ public class CommentsServiceImpl implements CommentsService {
 
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
-    private final OutDtoMaker outDtoMaker;
+    private final CommentMapper commentMapper;
 
-    public CommentsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository,  OutDtoMaker outDtoMaker) {
+    public CommentsServiceImpl(CommentRepository commentRepository, AdsRepository adsRepository,  CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.adsRepository = adsRepository;
-        this.outDtoMaker = outDtoMaker;
+        this.commentMapper = commentMapper;
     }
 
     // Получение комментариев объявления
@@ -39,7 +39,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new ObjectNotFoundException();
         }
 
-        return outDtoMaker.makeComments(adModel.getCommentModels());
+        return commentMapper.makeComments(adModel.getCommentModels());
     }
 
     // Добавление комментария к объявлению
@@ -62,7 +62,7 @@ public class CommentsServiceImpl implements CommentsService {
 
         commentRepository.save(commentModel);
 
-        return outDtoMaker.makeComment(commentModel);
+        return commentMapper.makeComment(commentModel);
     }
 
     // Удаление комментария
@@ -111,6 +111,6 @@ public class CommentsServiceImpl implements CommentsService {
 
         commentRepository.save(commentModel);
 
-        return outDtoMaker.makeComment(commentModel);
+        return commentMapper.makeComment(commentModel);
     }
 }

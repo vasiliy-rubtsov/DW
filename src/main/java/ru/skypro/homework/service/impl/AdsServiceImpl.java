@@ -7,10 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.component.OutDtoMaker;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.ForbiddenException;
 import ru.skypro.homework.exception.ObjectNotFoundException;
+import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.mapper.ExtendedAdMapper;
 import ru.skypro.homework.model.AdModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.AdsRepository;
@@ -32,24 +33,27 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
     private final UserDetailsManager userDetailsManager;
     private final ImagesService imagesService;
-    private final OutDtoMaker outDtoMaker;
+    private final ExtendedAdMapper extendedAdMapper;
+
+    private final AdMapper adMapper;
 
     @Value("${ads.image-file-dir}")
     private String imageFileDir;
 
-    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, UserDetailsManager userDetailsManager,  ImagesService imagesService,  OutDtoMaker outDtoMaker) {
+    public AdsServiceImpl(AdsRepository adsRepository, UserRepository userRepository, UserDetailsManager userDetailsManager,  ImagesService imagesService,  AdMapper adMapper, ExtendedAdMapper extendedAdMapper) {
         this.adsRepository = adsRepository;
         this.userRepository = userRepository;
         this.userDetailsManager = userDetailsManager;
         this.imagesService = imagesService;
-        this.outDtoMaker = outDtoMaker;
+        this.adMapper = adMapper;
+        this.extendedAdMapper = extendedAdMapper;
     }
 
     // Получение всех объявлений
     @Override
     public Ads getAllAds() {
         List<AdModel> ads = adsRepository.findAll();
-        return outDtoMaker.makeAds(ads);
+        return adMapper.makeAds(ads);
     }
 
     // Добавление объявления
@@ -71,7 +75,7 @@ public class AdsServiceImpl implements AdsService {
         adModel.setImage(targetFileName);
         adsRepository.save(adModel);
 
-        return outDtoMaker.makeAd(adModel);
+        return adMapper.makeAd(adModel);
     }
 
     // Получение информации об объявлении
@@ -83,7 +87,7 @@ public class AdsServiceImpl implements AdsService {
             throw new ObjectNotFoundException();
         }
 
-        return outDtoMaker.makeExtendedAd(adModel);
+        return extendedAdMapper.makeExtendedAd(adModel);
     }
 
     // Удаление объявления
@@ -131,7 +135,7 @@ public class AdsServiceImpl implements AdsService {
 
         adsRepository.save(adModel);
 
-        return outDtoMaker.makeAd(adModel);
+        return adMapper.makeAd(adModel);
     }
 
     // Получение объявлений авторизованного пользователя
@@ -140,7 +144,7 @@ public class AdsServiceImpl implements AdsService {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         List<AdModel> ads = adsRepository.findByAuthorId(userModel.getId());
-        return outDtoMaker.makeAds(ads);
+        return adMapper.makeAds(ads);
     }
 
     // Обновление картинки объявления

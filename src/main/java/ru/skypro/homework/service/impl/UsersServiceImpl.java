@@ -6,9 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.component.OutDtoMaker;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.ForbiddenException;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImagesService;
@@ -24,13 +24,13 @@ public class UsersServiceImpl implements UsersService {
     private final ImagesService imagesService;
     private final UserRepository userRepository;
     private final UserDetailsManager  userDetailsManager;
-    private  final OutDtoMaker outDtoMaker;
+    private final UserMapper userMapper;
 
-    public UsersServiceImpl(ImagesService imagesService, UserRepository userRepository, UserDetailsManager userDetailsManager, OutDtoMaker outDtoMaker) {
+    public UsersServiceImpl(ImagesService imagesService, UserRepository userRepository, UserDetailsManager userDetailsManager, UserMapper userMapper) {
         this.imagesService = imagesService;
         this.userRepository = userRepository;
         this.userDetailsManager = userDetailsManager;
-        this.outDtoMaker = outDtoMaker;
+        this.userMapper = userMapper;
     }
 
     // Обновление пароля
@@ -43,7 +43,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public User getUser() {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return outDtoMaker.makeUser(userModel);
+        return userMapper.makeUser(userModel);
     }
 
     // Обновление информации об авторизованном пользователе
