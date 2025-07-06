@@ -11,20 +11,17 @@ import ru.skypro.homework.exception.ObjectNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String ForbiddenExceptionHandler(ForbiddenException e) {
-        return e.getMessage();
+    public ResponseEntity<String> ForbiddenExceptionHandler(ForbiddenException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String ObjectNotFoundExceptionHandler(ObjectNotFoundException e) {
-        return e.getMessage();
+    public ResponseEntity<String> ObjectNotFoundExceptionHandler(ObjectNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleGenericException(Exception e) {
-        return e.getMessage();
+    public ResponseEntity<String> handleGenericException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
