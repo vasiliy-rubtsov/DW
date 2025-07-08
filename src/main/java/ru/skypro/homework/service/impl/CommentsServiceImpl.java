@@ -13,7 +13,6 @@ import ru.skypro.homework.model.CommentModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.Date;

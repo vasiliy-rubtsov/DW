@@ -1,12 +1,9 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.skypro.homework.exception.ForbiddenException;
-import ru.skypro.homework.exception.ObjectNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
