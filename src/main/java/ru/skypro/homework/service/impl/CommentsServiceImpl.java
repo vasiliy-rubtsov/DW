@@ -101,7 +101,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new ObjectNotFoundException();
         }
 
-        if (commentModel.getAuthor().getId() != userModel.getId() || !userModel.getRole().equals("ADMIN")) {
+        if (!(commentModel.getAuthor().getId() == userModel.getId() || userModel.getRole().equals("ADMIN"))) {
             // Если автор комментария не текущий пользователь или не админ, то запрещаем редактирование
             throw new ForbiddenException();
         }

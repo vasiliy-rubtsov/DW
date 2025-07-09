@@ -124,7 +124,7 @@ public class AdsServiceImpl implements AdsService {
             throw new ObjectNotFoundException();
         }
 
-        if (adModel.getAuthor().getId() != userModel.getId() || !userModel.getRole().equals("ADMIN")) {
+        if (!(adModel.getAuthor().getId() == userModel.getId() || userModel.getRole().equals("ADMIN"))) {
             // Если текущий пользователь не автор этого объявления или не админ, то запрещаем редактирование
             throw new ForbiddenException();
         }
@@ -158,7 +158,7 @@ public class AdsServiceImpl implements AdsService {
             throw new ObjectNotFoundException();
         }
 
-        if (adModel.getAuthor().getId() != userModel.getId() || !userModel.getRole().equals("ADMIN")) {
+        if (!(adModel.getAuthor().getId() == userModel.getId() || userModel.getRole().equals("ADMIN"))) {
             // Если текущий пользователь не автор этого объявления или не админ, то запрещаем редактирование
             throw new ForbiddenException();
         }
