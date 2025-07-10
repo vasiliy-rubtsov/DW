@@ -49,14 +49,23 @@ public class AdsServiceImpl implements AdsService {
         this.extendedAdMapper = extendedAdMapper;
     }
 
-    // Получение всех объявлений
+    /**
+     * Получение всех объявлений
+     * @return Ads
+     */
     @Override
     public Ads getAllAds() {
         List<AdModel> ads = adsRepository.findAll();
         return adMapper.makeAds(ads);
     }
 
-    // Добавление объявления
+    /**
+     * Добавление объявления
+     * @param properties CreateOrUpdateAd
+     * @param image MultipartFile
+     * @return Ad
+     * @throws IOException
+     */
     @Override
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) throws IOException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -78,7 +87,12 @@ public class AdsServiceImpl implements AdsService {
         return adMapper.makeAd(adModel);
     }
 
-    // Получение информации об объявлении
+    /**
+     * Получение информации об объявлении
+     * @param id long
+     * @return ExtendedAd
+     * @throws ObjectNotFoundException
+     */
     @Override
     public ExtendedAd getExtendedAdById(long id) throws ObjectNotFoundException {
         AdModel adModel = adsRepository.findById(id).orElse(null);
@@ -90,7 +104,12 @@ public class AdsServiceImpl implements AdsService {
         return extendedAdMapper.makeExtendedAd(adModel);
     }
 
-    // Удаление объявления
+    /**
+     * Удаление объявления
+     * @param id long
+     * @throws ForbiddenException
+     * @throws ObjectNotFoundException
+     */
     @Override
     public void removeAd(long id) throws ForbiddenException, ObjectNotFoundException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -113,7 +132,14 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.delete(adModel);
     }
 
-    // Обновление информации об объявлении
+    /**
+     * Обновление информации об объявлении
+     * @param id long
+     * @param createOrUpdateAd CreateOrUpdateAd
+     * @return Ad
+     * @throws ForbiddenException
+     * @throws ObjectNotFoundException
+     */
     @Override
     public Ad updateAds(long id, CreateOrUpdateAd createOrUpdateAd) throws ForbiddenException, ObjectNotFoundException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -138,7 +164,10 @@ public class AdsServiceImpl implements AdsService {
         return adMapper.makeAd(adModel);
     }
 
-    // Получение объявлений авторизованного пользователя
+    /**
+     * Получение объявлений авторизованного пользователя
+     * @return Ads
+     */
     @Override
     public Ads getAdsMe() {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -147,7 +176,15 @@ public class AdsServiceImpl implements AdsService {
         return adMapper.makeAds(ads);
     }
 
-    // Обновление картинки объявления
+    /**
+     * Обновление картинки объявления
+     * @param id long
+     * @param image MultipartFile
+     * @return byte[]
+     * @throws IOException
+     * @throws ObjectNotFoundException
+     * @throws ForbiddenException
+     */
     @Override
     public byte[] updateImage(long id, MultipartFile image) throws IOException, ObjectNotFoundException, ForbiddenException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

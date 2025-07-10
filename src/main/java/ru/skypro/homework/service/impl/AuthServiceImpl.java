@@ -20,6 +20,12 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
     }
 
+    /**
+     * Авториация пользователя
+     * @param userName String
+     * @param password String
+     * @return boolean
+     */
     @Override
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
@@ -29,6 +35,11 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, userDetails.getPassword());
     }
 
+    /**
+     * Регистрация нового пользователя
+     * @param register Register
+     * @return boolean
+     */
     @Override
     public boolean register(Register register) {
         if (manager.userExists(register.getUsername())) {
@@ -45,5 +56,4 @@ public class AuthServiceImpl implements AuthService {
         manager.createUser(userModel);
         return true;
     }
-
 }

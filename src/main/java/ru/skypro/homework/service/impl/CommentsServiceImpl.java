@@ -30,7 +30,12 @@ public class CommentsServiceImpl implements CommentsService {
         this.commentMapper = commentMapper;
     }
 
-    // Получение комментариев объявления
+    /**
+     * Получение комментариев объявления
+     * @param id long
+     * @return Comments
+     * @throws ObjectNotFoundException
+     */
     @Override
     public Comments getComments(long id) throws ObjectNotFoundException {
         AdModel adModel = adsRepository.findById(id).orElse(null);
@@ -41,7 +46,13 @@ public class CommentsServiceImpl implements CommentsService {
         return commentMapper.makeComments(adModel.getCommentModels());
     }
 
-    // Добавление комментария к объявлению
+    /**
+     * Добавление комментария к объявлению
+     * @param id long
+     * @param createdComment CreateOrUpdateComment
+     * @return Comment
+     * @throws ObjectNotFoundException
+     */
     @Override
     public Comment addComment(long id, CreateOrUpdateComment createdComment) throws ObjectNotFoundException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -64,7 +75,13 @@ public class CommentsServiceImpl implements CommentsService {
         return commentMapper.makeComment(commentModel);
     }
 
-    // Удаление комментария
+    /**
+     * Удаление комментария
+     * @param adId long
+     * @param commentId long
+     * @throws ObjectNotFoundException
+     * @throws ForbiddenException
+     */
     @Override
     public void deleteComment(long adId, long commentId) throws ObjectNotFoundException, ForbiddenException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -81,7 +98,15 @@ public class CommentsServiceImpl implements CommentsService {
         commentRepository.delete(commentModel);
     }
 
-    // Обновление комментария
+    /**
+     * Обновление комментария
+     * @param adId long
+     * @param commentId long
+     * @param updatedComment CreateOrUpdateComment
+     * @return Comment
+     * @throws ObjectNotFoundException
+     * @throws ForbiddenException
+     */
     @Override
     public Comment updateComment(long adId, long commentId, CreateOrUpdateComment updatedComment) throws ObjectNotFoundException, ForbiddenException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
