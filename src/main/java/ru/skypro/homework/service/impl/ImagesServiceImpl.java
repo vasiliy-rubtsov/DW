@@ -21,6 +21,12 @@ public class ImagesServiceImpl implements ImagesService {
 
     private final Logger logger = LoggerFactory.getLogger(ImagesServiceImpl.class);
 
+    /**
+     *
+     * @param file MultipartFile
+     * @param targetFileName String
+     * @throws IOException
+     */
     @Override
     public void saveFileToDisk(MultipartFile file, String targetFileName) throws IOException {
         Path outputFilePath = Path.of(imageFileDir, targetFileName);
@@ -34,12 +40,25 @@ public class ImagesServiceImpl implements ImagesService {
         }
     }
 
+    /**
+     *
+     * @param fileName String
+     * @return byte[]
+     * @throws IOException
+     */
     @Override
     public byte[] loadFileByName(String fileName) throws IOException {
         Path filePath = Path.of(imageFileDir, fileName);
         return Files.readAllBytes(filePath);
     }
 
+    /**
+     *
+     * @param originalFilename String
+     * @param pk long
+     * @param fileType FileTypeEnum
+     * @return String
+     */
     @Override
     public String makeTargetFileName(String originalFilename, long pk, FileTypeEnum fileType) {
         String fileNameExtension = "";

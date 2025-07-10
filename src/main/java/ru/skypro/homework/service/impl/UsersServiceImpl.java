@@ -32,20 +32,31 @@ public class UsersServiceImpl implements UsersService {
         this.userMapper = userMapper;
     }
 
-    // Обновление пароля
+    /**
+     * Обновление пароля
+     * @param newPassword NewPassword
+     * @throws ForbiddenException
+     */
     @Override
     public void setPassword(NewPassword newPassword) throws ForbiddenException {
         userDetailsManager.changePassword(newPassword.getCurrentPassword(), newPassword.getNewPassword());
     }
 
-    // Получение информации об авторизованном пользователе
+    /**
+     * Получение информации об авторизованном пользователе
+     * @return User
+     */
     @Override
     public User getUser() {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userMapper.makeUser(userModel);
     }
 
-    // Обновление информации об авторизованном пользователе
+    /**
+     * Обновление информации об авторизованном пользователе
+     * @param user UpdateUser
+     * @return UpdateUser
+     */
     @Override
     public UpdateUser updateUser(UpdateUser user) {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -58,7 +69,11 @@ public class UsersServiceImpl implements UsersService {
         return user;
     }
 
-    // Обновление аватара авторизованного пользователя
+    /**
+     * Обновление аватара авторизованного пользователя
+     * @param image MultipartFile
+     * @throws IOException
+     */
     @Override
     public void updateUserImage(MultipartFile image) throws IOException {
         UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
