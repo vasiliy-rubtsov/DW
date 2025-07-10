@@ -13,7 +13,6 @@ import ru.skypro.homework.model.CommentModel;
 import ru.skypro.homework.model.UserModel;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentsService;
 
 import java.util.Date;
@@ -102,7 +101,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new ObjectNotFoundException();
         }
 
-        if (commentModel.getAuthor().getId() != userModel.getId() || !userModel.getRole().equals("ADMIN")) {
+        if (!(commentModel.getAuthor().getId() == userModel.getId() || userModel.getRole().equals("ADMIN"))) {
             // Если автор комментария не текущий пользователь или не админ, то запрещаем редактирование
             throw new ForbiddenException();
         }
